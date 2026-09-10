@@ -137,7 +137,7 @@ jobs:
       - name: Compilar APK (Release)
         run: |
           cd mobile
-          flutter build apk --release --no-tree-shake-icons
+          flutter build web
 
       - name: Subir ejecutable APK como Artefacto
         uses: actions/upload-artifact@v4
