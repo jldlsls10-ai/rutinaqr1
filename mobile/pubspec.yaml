@@ -1,0 +1,74 @@
+name: rutinaqr
+description: RutinaQR - Rutinas diarias con códigos QR para personas con dificultades de aprendizaje
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Estado
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Red
+  dio: ^5.5.0+1
+  pretty_dio_logger: ^1.4.0
+
+  # Almacenamiento
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.2
+  drift: ^2.19.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # QR
+  mobile_scanner: ^5.1.1
+  qr_flutter: ^4.1.0
+
+  # Notificaciones y alarmas
+  flutter_local_notifications: ^17.2.2
+  # android_alarm_manager_plus: ^4.0.3  # descomentar en implementación real
+  timezone: ^0.9.4
+
+  # UI / Accesibilidad
+  google_fonts: ^6.2.1
+  flutter_tts: ^4.0.2
+  vibration: ^2.0.0
+  lottie: ^3.1.2
+
+  # Utilidades
+  intl: ^0.19.0
+  uuid: ^4.4.2
+  collection: ^1.18.0
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # PDF / impresión
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  drift_dev: ^2.19.0
+  riverpod_generator: ^2.4.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  # assets:
+  #   - assets/images/
+  #   - assets/sounds/
+  #   - assets/lottie/
