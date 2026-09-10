@@ -25,22 +25,25 @@ export class User {
   @Column({ type: 'citext', unique: true, nullable: true })
   email: string | null;
 
-  @Column({ name: 'password_hash', nullable: true })
+  @Column({ type: 'varchar', name: 'password_hash', nullable: true }) 
   passwordHash: string | null;
 
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 
-  @Column({ name: 'display_name', length: 120 })
+  // 1. Agregado type: 'varchar'
+  @Column({ type: 'varchar', name: 'display_name', length: 120 })
   displayName: string;
 
   @Column({ name: 'avatar_url', type: 'text', nullable: true })
   avatarUrl: string | null;
 
-  @Column({ length: 10, default: 'es' })
+  // 2. Agregado type: 'varchar'
+  @Column({ type: 'varchar', length: 10, default: 'es' })
   locale: string;
 
-  @Column({ name: 'pin_hash', nullable: true })
+  // 3. Agregado type: 'varchar'
+  @Column({ type: 'varchar', name: 'pin_hash', nullable: true })
   pinHash: string | null;
 
   @Column({ name: 'is_active', default: true })
