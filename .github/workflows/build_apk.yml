@@ -1,0 +1,41 @@
+name: Compilar APK Flutter
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Obtener dependencias
+        run: |
+          cd mobile
+          flutter pub get
+
+      - name: Compilar APK (Release)
+        run: |
+          cd mobile
+          flutter build apk --release
+
+      - name: Subir ejecutable APK como Artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: RutinaQR-App
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
