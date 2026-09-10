@@ -22,12 +22,13 @@ jobs:
       - name: Configurar Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
+          flutter-version: '3.19.6'
           channel: 'stable'
 
-      - name: Reparar/Generar proyecto Android
+      - name: Regenerar carpeta Android
         run: |
           cd mobile
+          rm -rf android
           flutter create . --platforms=android
 
       - name: Obtener dependencias
