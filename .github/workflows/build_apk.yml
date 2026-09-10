@@ -1,12 +1,15 @@
-name: Compilar APK Flutter
+name: Compilar y Publicar Flutter Web
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,112 +38,23 @@ jobs:
             source_gen: ^1.5.0
           EOF
 
-      - name: Regenerar carpeta Android
+      - name: Generar soporte para Web
         run: |
           cd mobile
-          rm -rf android
-          flutter create . --platforms=android
-
-      - name: Configurar propiedades de Gradle y forzar SDK en plugins
-        run: |
-          cd mobile/android
-          echo "android.experimental.issue-checker.enabled=false" >> gradle.properties
-          echo "android.suppressUnsupportedCompileSdk=36" >> gradle.properties
-
-          cat << 'EOF' > build.gradle
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          subprojects {
-              afterEvaluate { project ->
-                  if (project.hasProperty('android')) {
-                      project.android {
-                          compileSdkVersion 36
-                          if (namespace == null) {
-                              namespace project.group
-                          }
-                      }
-                  }
-              }
-          }
-
-          rootProject.buildDir = '../build'
-          subprojects {
-              project.buildDir = "${rootProject.buildDir}/${project.name}"
-          }
-          subprojects {
-              project.evaluationDependsOn(':app')
-          }
-
-          tasks.register("clean", Delete) {
-              delete rootProject.buildDir
-          }
-          EOF
-
-      - name: Reemplazar build.gradle de app
-        run: |
-          rm -f mobile/android/app/build.gradle.kts
-          cat << 'EOF' > mobile/android/app/build.gradle
-          plugins {
-              id "com.android.application"
-              id "kotlin-android"
-              id "dev.flutter.flutter-gradle-plugin"
-          }
-
-          android {
-              namespace "com.example.rutinaqr"
-              compileSdk 36
-
-              compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_1_8
-                  targetCompatibility JavaVersion.VERSION_1_8
-                  coreLibraryDesugaringEnabled true
-              }
-
-              kotlinOptions {
-                  jvmTarget = '1.8'
-              }
-
-              defaultConfig {
-                  applicationId "com.example.rutinaqr"
-                  minSdk 21
-                  targetSdk 35
-                  versionCode 1
-                  versionName "1.0.0"
-              }
-
-              buildTypes {
-                  release {
-                      signingConfig signingConfigs.debug
-                  }
-              }
-          }
-
-          flutter {
-              source "../.."
-          }
-
-          dependencies {
-              coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-          }
-          EOF
+          flutter create . --platforms=web
 
       - name: Obtener dependencias
         run: |
           cd mobile
           flutter pub get
 
-      - name: Compilar APK (Release)
+      - name: Compilar para Web
         run: |
           cd mobile
-          flutter build web
+          flutter build web --release --base-href "/${{ github.event.repository.name }}/"
 
-      - name: Subir ejecutable APK como Artefacto
-        uses: actions/upload-artifact@v4
+      - name: Publicar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: RutinaQR-App
-          path: mobile/build/app/outputs/flutter-apk/app-release.apk
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./mobile/build/web
