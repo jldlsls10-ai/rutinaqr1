@@ -36,52 +36,51 @@ jobs:
           rm -rf android
           flutter create . --platforms=android
 
-      - name: Configurar Gradle Kotlin Script con Desugaring
+      - name: Reemplazar build.gradle por sintaxis Groovy compatible
         run: |
-          cat << 'EOF' > mobile/android/app/build.gradle.kts
+          rm -f mobile/android/app/build.gradle.kts
+          cat << 'EOF' > mobile/android/app/build.gradle
           plugins {
-              id("com.android.application")
-              id("kotlin-android")
-              id("dev.flutter.flutter-gradle-plugin")
+              id "com.android.application"
+              id "kotlin-android"
+              id "dev.flutter.flutter-gradle-plugin"
           }
 
           android {
-              namespace = "com.example.rutinaqr"
-              compileSdk = 34
+              namespace "com.example.rutinaqr"
+              compileSdk 34
 
               compileOptions {
-                  sourceCompatibility = JavaVersion.VERSION_1_8
-                  targetCompatibility = JavaVersion.VERSION_1_8
-                  isCoreLibraryDesugaringEnabled = true
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
+                  coreLibraryDesugaringEnabled true
               }
 
               kotlinOptions {
-                  jvmTarget = "1.8"
+                  jvmTarget = '1.8'
               }
 
               defaultConfig {
-                  applicationId = "com.example.rutinaqr"
-                  minSdk = 21
-                  targetSdk = 34
-                  versionCode = 1
-                  versionName = "1.0.0"
+                  applicationId "com.example.rutinaqr"
+                  minSdk 21
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0.0"
               }
 
               buildTypes {
                   release {
-                      isMinifyEnabled = false
-                      isShrinkResources = false
-                      signingConfig = signingConfigs.getByName("debug")
+                      signingConfig signingConfigs.debug
                   }
               }
           }
 
           flutter {
-              source = "../.."
+              source "../.."
           }
 
           dependencies {
-              coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+              coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
           }
           EOF
 
