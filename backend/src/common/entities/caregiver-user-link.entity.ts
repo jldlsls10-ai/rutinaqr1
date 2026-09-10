@@ -34,7 +34,7 @@ export class CaregiverUserLink {
   @Column({ type: 'enum', enum: LinkStatus, default: LinkStatus.PENDING })
   status: LinkStatus;
 
-  @Column({ name: 'invitation_code', length: 12, unique: true, nullable: true })
+ @Column({ type: 'varchar', name: 'invitation_code', length: 12, unique: true, nullable: true })
   invitationCode: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
