@@ -41,9 +41,13 @@ jobs:
           rm -rf android
           flutter create . --platforms=android
 
-      - name: Ignorar comprobaciones estrictas de SDK en plugins
+      - name: Configurar propiedades de Gradle y forzar SDK en plugins
         run: |
-          cat << 'EOF' > mobile/android/build.gradle
+          cd mobile/android
+          echo "android.experimental.issue-checker.enabled=false" >> gradle.properties
+          echo "android.suppressUnsupportedCompileSdk=36" >> gradle.properties
+
+          cat << 'EOF' > build.gradle
           allprojects {
               repositories {
                   google()
@@ -55,13 +59,11 @@ jobs:
               afterEvaluate { project ->
                   if (project.hasProperty('android')) {
                       project.android {
+                          compileSdkVersion 36
                           if (namespace == null) {
                               namespace project.group
                           }
                       }
-                  }
-                  tasks.matching { it.name.contains("checkReleaseAarMetadata") }.configureEach {
-                      enabled = false
                   }
               }
           }
