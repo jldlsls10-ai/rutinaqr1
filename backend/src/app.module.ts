@@ -11,17 +11,20 @@ import { RealtimeModule } from './realtime/realtime.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      username: process.env.DB_USERNAME || 'rutinaqr',
-      password: process.env.DB_PASSWORD || 'change_me',
-      database: process.env.DB_DATABASE || 'rutinaqr',
-      autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production', // solo en desarrollo
-      logging: process.env.NODE_ENV === 'development',
-    }),
+  TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  username: process.env.DB_USERNAME || 'rutinaqr',
+  password: process.env.DB_PASSWORD || 'change_me',
+  database: process.env.DB_DATABASE || 'rutinaqr',
+  autoLoadEntities: true,
+  synchronize: false,
+  logging: process.env.NODE_ENV === 'development',
+  ssl: process.env.DB_HOST?.includes('neon.tech')
+    ? { rejectUnauthorized: false }
+    : false,
+}),
     AuthModule,
     UsersModule,
     LinksModule,
