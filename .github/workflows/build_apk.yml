@@ -36,7 +36,7 @@ jobs:
           rm -rf android
           flutter create . --platforms=android
 
-      - name: Reemplazar build.gradle por sintaxis Groovy compatible
+      - name: Reemplazar build.gradle con compileSdk 35
         run: |
           rm -f mobile/android/app/build.gradle.kts
           cat << 'EOF' > mobile/android/app/build.gradle
@@ -48,7 +48,7 @@ jobs:
 
           android {
               namespace "com.example.rutinaqr"
-              compileSdk 34
+              compileSdk 35
 
               compileOptions {
                   sourceCompatibility JavaVersion.VERSION_1_8
@@ -63,7 +63,7 @@ jobs:
               defaultConfig {
                   applicationId "com.example.rutinaqr"
                   minSdk 21
-                  targetSdk 34
+                  targetSdk 35
                   versionCode 1
                   versionName "1.0.0"
               }
