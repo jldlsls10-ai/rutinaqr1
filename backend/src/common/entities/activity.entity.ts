@@ -41,8 +41,8 @@ export class Activity {
   @Column({ name: 'qr_payload', type: 'text', nullable: true })
   qrPayload: string | null;
 
-  @Column({ name: 'qr_signature', length: 128, nullable: true })
-  qrSignature: string | null;
+@Column({ type: 'varchar', name: 'qr_signature', nullable: true })
+qrSignature: string | null;
 
   @Column({ name: 'grace_minutes', default: 10 })
   graceMinutes: number;
